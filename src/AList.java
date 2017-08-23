@@ -11,17 +11,14 @@ public class AList<T> implements ListInterface<T> {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
 	}
 
 	private T[] list; // Array of list entries; ignore list[0]
 	private int numberOfEntries;
-	private boolean initialized = false;
-	private static final int DEFAULT_CAPACITY = 25;
-	private static final int MAX_CAPACITY = 10000;
+	private static final int DEFAULT_INITIAL_CAPACITY = 25;
 	
 	public AList() {
-		this(DEFAULT_CAPACITY); // Call next constructor
+		this(DEFAULT_INITIAL_CAPACITY); // Call next constructor
 	} // End default constructor
 	
 	public AList(int initialCapacity) {
@@ -40,31 +37,61 @@ public class AList<T> implements ListInterface<T> {
 	}// end add
 	
 	public boolean add(int newPosition, T newEntry) {
-		return false;
+		boolean isSuccessful = true;
+		if ((newPosition >= 1) && (newPosition <= numberOfEntries + 1)) {
+			ensureCapacity();
+			makeRoom(newPosition);
+			list[newPosition - 1] = newEntry;
+			numberOfEntries++;
+		}
+		else
+			isSuccessful = false;
+			return isSuccessful;
 	}//end add
 
 	public T remove(int givenPosition) {
-		return null;
-		// TODO Implementation deferred for remove.
-	}
+		T result = null; // return value
+		if ((givenPosition >= 1) && (givenPosition <= numberOfEntries)) {
+			assert !isEmpty();
+			result = list[givenPosition - 1]; // get and entry to be moved.  Move subsequent entries toward entry to be removed, unless it's last in the list.
+			if (givenPosition < numberOfEntries)
+				removeGap(givenPosition);
+			numberOfEntries--;
+		}//end if		
+		return result; // return reference to removed entry, or null if either list is empty or givenPosition is invalid.
+	}//end remove
 	
 	public void clear() {
 		//TODO create clear
 	}
 	
 	public boolean replace(int givenPosition, T newEntry) {
-		//TODO Implementation of replace deferred.
-		return false;
+		boolean isSuccessful = true;
+		if ((givenPosition >= 1) && (givenPosition <= numberOfEntries)) {
+			assert !isEmpty();
+			list[givenPosition - 1] = newEntry;
+		}
+		else 
+			isSuccessful = false;
+			return isSuccessful;
 	}
 	
 	public T getEntry(int givenPosition) {
-		//TODO Implementation of getEntry
-		return null;
+		T result = null;
+		if ((givenPosition >= 1) && (givenPosition <= numberOfEntries)){
+			assert !isEmpty();
+			result = list[givenPosition - 1];
+		}
+		return result;
 	}
 	
 	public boolean contains(T anEntry) {
-		//TODO implementation deferred
-		return false;
+		boolean found = false;
+		for (int index = 0; !found && (index < numberOfEntries); index++) {
+			if (anEntry.equals(list[index]))
+				found = true;
+		}
+		return found;
 	}
 	
 	public int getLength() {
@@ -76,12 +103,11 @@ public class AList<T> implements ListInterface<T> {
 	}
 	
 	public T[] toArray() {
-		
 		// The cast is safe because the new array contains null entries
 		@SuppressWarnings("unchecked")
 		T[] result = (T[])new Object[numberOfEntries];
 		for (int index = 0; index < numberOfEntries; index++) {
-			result[index] = list[index + 1];
+			result[index] = list[index];
 		}// end for
 		return result;
 	}//end toArray()
@@ -92,15 +118,24 @@ public class AList<T> implements ListInterface<T> {
 		list = Arrays.copyOf(list, 2 * list.length);
 	}
 	
+	// Shifts entries that are beyond the entry to be removed to the next lower position.
+	// Precondition: 1 <= givenPosition < numberOfEntries;
+	// numberOfEntries is list's length before removal.
+	private void removeGap(int givenPosition) {
+		assert (givenPosition >= 1) && (givenPosition < numberOfEntries);
+		int removedIndex = givenPosition - 1;
+		int lastIndex = numberOfEntries -1;
+		for (int index = removedIndex; index < lastIndex; index++)
+			list[index] = list[index + 1];
+	}
+	
 	// Makes room for a new entry at newPosition.
 	// Precondition: 1 <= newPosition <= numberOfEntries + 1;
 	//		numberOfEntries is list's length before addition;
 	//		checkInitialization has been called.
-	private void makeRoom(int newPosition) {
-		assert (newPosition >= 1) && (newPosition <= numberOfEntries + 1);
-		
-		int newIndex = newPosition;
-		int lastIndex = numberOfEntries;
+	private void makeRoom(int newPosition) {		
+		int newIndex = newPosition - 1;
+		int lastIndex = numberOfEntries - 1;
 		
 		// Move each entry to next higher index, starting at the end of the list and continuing till the entry at newIndex is moved
 		for (int index = lastIndex; index >= newIndex; index--) 
