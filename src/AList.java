@@ -25,30 +25,23 @@ public class AList<T> implements ListInterface<T> {
 	} // End default constructor
 	
 	public AList(int initialCapacity) {
-		// Is initialCapacity too small?
-		if (initialCapacity < DEFAULT_CAPACITY)
-			initialCapacity = DEFAULT_CAPACITY;
-		else // Is initial Capacity too big?
-			checkCapacity(initialCapacity);
-		
-		// The cast is safe because the new array contains null entries
-		@SuppressWarnings("unchecked")
-		T[] tempList = (T[])new Object[initialCapacity + 1];
-		list = tempList;
 		numberOfEntries = 0;
-		initialized = true;
+		
+		//the cast is safe beause the new array contains null entries
+		@SuppressWarnings("unchecked")
+		T[] tempList = (T[])new Object[initialCapacity];
+		list = tempList;
 	}//end constructor
 	
 	public void add(T newEntry) {
-		checkInitialization();
+		ensureCapacity();
 		list[numberOfEntries + 1] = newEntry;
 		numberOfEntries++;
-		ensureCapacity();
 	}// end add
 	
-	public void add(int newPosition, T newEntry) {
-		// TODO create add
-	}
+	public boolean add(int newPosition, T newEntry) {
+		return false;
+	}//end add
 
 	public T remove(int givenPosition) {
 		return null;
@@ -59,28 +52,15 @@ public class AList<T> implements ListInterface<T> {
 		//TODO create clear
 	}
 	
-	public T replace(int givenPosition, T newEntry) {
+	public boolean replace(int givenPosition, T newEntry) {
 		//TODO Implementation of replace deferred.
-		return null;
+		return false;
 	}
 	
 	public T getEntry(int givenPosition) {
 		//TODO Implementation of getEntry
 		return null;
 	}
-	
-	public T[] toArray() {
-		checkInitialization();
-		
-		// The cast is safe because the new array contains null entries
-		@SuppressWarnings("unchecked")
-		T[] result = (T[])new Object[numberOfEntries];
-		for (int index = 0; index < numberOfEntries; index++) {
-			result[index] = list[index + 1];
-		}
-		
-		return result;
-	}//end toArray()
 	
 	public boolean contains(T anEntry) {
 		//TODO implementation deferred
@@ -95,18 +75,38 @@ public class AList<T> implements ListInterface<T> {
 		return numberOfEntries == 0; // or getLength() == 0
 	}
 	
+	public T[] toArray() {
+		
+		// The cast is safe because the new array contains null entries
+		@SuppressWarnings("unchecked")
+		T[] result = (T[])new Object[numberOfEntries];
+		for (int index = 0; index < numberOfEntries; index++) {
+			result[index] = list[index + 1];
+		}// end for
+		return result;
+	}//end toArray()
+	
 	// Doubles the capacity of the array list if it's full.
-	// Precondition: checkInitialization has been called.
 	private void ensureCapacity() {
-		int capacity = list.length - 1;
-		if (numberOfEntries >= capacity) {
-			int newCapacity = 2 * capacity;
-			checkCapacity(newCapacity);
-			list = Arrays.copyOf(list,  newCapacity + 1);
-		}
+		if (numberOfEntries == list.length) 	
+		list = Arrays.copyOf(list, 2 * list.length);
 	}
 	
-	//This class will also implement checkCapacity, checkInitialization & two more private methods to be introduced later.
+	// Makes room for a new entry at newPosition.
+	// Precondition: 1 <= newPosition <= numberOfEntries + 1;
+	//		numberOfEntries is list's length before addition;
+	//		checkInitialization has been called.
+	private void makeRoom(int newPosition) {
+		assert (newPosition >= 1) && (newPosition <= numberOfEntries + 1);
+		
+		int newIndex = newPosition;
+		int lastIndex = numberOfEntries;
+		
+		// Move each entry to next higher index, starting at the end of the list and continuing till the entry at newIndex is moved
+		for (int index = lastIndex; index >= newIndex; index--) 
+			list[index + 1] = list[index];
+	}//end makeRoom
 	
-
+	//This class will also implement checkCapacity & two more private methods to be introduced later.
+	
 }//end class

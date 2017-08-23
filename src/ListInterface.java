@@ -21,9 +21,8 @@ public interface ListInterface<T> {
 	 * The list's size is increased by 1.
 	 * @param newPosition An integer that specifies the desired position of a new entry.
 	 * @param newEntry The object to be added as a new entry.
-	 * @throw IndexOutOfBoundsException if either newPosition < 1 or newPosition > getLength() + 1.
 	 */
-	public void add(int newPosition, T newEntry);
+	public boolean add(int newPosition, T newEntry);
 	
 	/**
 	 * Removes the entry at a given position from this list.
@@ -45,23 +44,15 @@ public interface ListInterface<T> {
 	 * @param givenPosition An integer that indicates the position of the entry to be replaced.
 	 * @param newEntry The object that will replace the entry at the position givenPosition.
 	 * @return The original entry that was replaced.
-	 * @throws IndexOutOfBoundsException if either givenPosition < 1 or givenPosition > getLength().
 	 */
-	public T replace(int givenPosition, T newEntry);
+	public boolean replace(int givenPosition, T newEntry);
 	
 	/**
 	 * Retrieves the entry at a given position in the list.
 	 * @param givenPosition An integer that indicates the position of the desired entry.
 	 * @return A reference to the indicated entry.
-	 * @throws IndexOutOfBoundsException if either givenPosition < 1 or givenPosition > getLength();
 	 */
 	public T getEntry(int givenPosition);
-	
-	/**
-	 * Retrieves all entries that are in this list in the order in which they are in the list.
-	 * @return A newly allocated array of all the entries in the list.  IF the list is empty, returned array is empty.
-	 */
-	public T[] toArray();
 	
 	/**
 	 * Sees whether this list contains a given entry.
@@ -81,5 +72,11 @@ public interface ListInterface<T> {
 	 * @return True if the list is empty, false if it is not.
 	 */
 	public boolean isEmpty();
+	
+	/**
+	 * Retrieves all entries that are in this list in the order in which they are in the list.
+	 * @return A newly allocated array of all the entries in the list.  IF the list is empty, returned array is empty.
+	 */
+	public T[] toArray();
 	
 }//end ListInterface
