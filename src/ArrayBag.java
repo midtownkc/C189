@@ -50,22 +50,47 @@ public class ArrayBag<T> implements BagInterface<T>
 	}
 	
 	public boolean contains(T anEntry) {
-		boolean found = false;
-		for (int index = 0; !found && (index < numberOfEntries); index++) {
+		return getIndexOf(anEntry) > -1;
+	}
+	
+	private T removeEntry(int givenIndex) {
+		T result = null;
+		if (!isEmpty() && (givenIndex >= 0)) {
+			result = bag[givenIndex];
+			numberOfEntries--;
+			bag[givenIndex] = bag[numberOfEntries];
+			bag[numberOfEntries] = null;
+		}
+		return result;
+	}
+	
+	private int getIndexOf(T anEntry) {
+		int where = -1;
+		boolean stillLooking = true;
+		for (int index = 0; stillLooking && (index < numberOfEntries); index++) {
 			if (anEntry.equals(bag[index])) {
-				found = true;
-			}//end if
-		}//end for
-		return found;
+				stillLooking = false;
+				where = index;
+			}
+		}
+		return where;
 	}
 	
 	public T remove() {
-		return null; // STUB
+		T result = removeEntry(numberOfEntries - 1);
+		return result;
+	}
+	
+	public boolean remove(T anEntry) {
+		int index = getIndexOf(anEntry);
+		T result = removeEntry(index);
+		return anEntry.equals(result);
 	}
 	
 	public void clear() {
-		// STUB
-	}
+		while (!isEmpty())
+			remove();
+	}//end clear
 	
 	public boolean isEmpty() {
 		return numberOfEntries == 0;
@@ -90,10 +115,4 @@ public class ArrayBag<T> implements BagInterface<T>
 		}//end for
 		return counter;
 	}//end getFrequencyOf
-	
-	
-	
-	
-	
-	//more functions and partials to be declared in BagInterface
-}
+} // end ArrayBag

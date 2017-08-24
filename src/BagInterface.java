@@ -14,7 +14,7 @@ public interface BagInterface<T> {
 	
 	public void clear();
 	
-	public int getFrequencyof(T anEntry);
+	public int getFrequencyOf(T anEntry);
 	
 	public boolean contains(T anEntry);
 	
