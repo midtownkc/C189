@@ -49,6 +49,16 @@ public class ArrayBag<T> implements BagInterface<T>
 		return result;
 	}
 	
+	public boolean contains(T anEntry) {
+		boolean found = false;
+		for (int index = 0; !found && (index < numberOfEntries); index++) {
+			if (anEntry.equals(bag[index])) {
+				found = true;
+			}//end if
+		}//end for
+		return found;
+	}
+	
 	public T remove() {
 		return null; // STUB
 	}
@@ -64,6 +74,24 @@ public class ArrayBag<T> implements BagInterface<T>
 	public int getCurrentSize() {
 		return numberOfEntries;
 	}
+	
+	/**
+	 * Counts the number of times a given entry appears in this bag.
+	 * @param anEntry the entry to be counted
+	 * @return the number of times anEntry appears in the bag.
+	 */
+	
+	public int getFrequencyOf(T anEntry) {
+		int counter = 0;
+		for (int index = 0; index < numberOfEntries; index++) {
+			if (anEntry.equals(bag[index])) {
+				counter ++;
+			}//end if
+		}//end for
+		return counter;
+	}//end getFrequencyOf
+	
+	
 	
 	
 	
