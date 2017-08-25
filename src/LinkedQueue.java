@@ -39,12 +39,11 @@ public class LinkedQueue<T> implements QueueInterface<T> {
 	}
 	
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		return ((firstNode == null) && (lastNode == null));
+	}//end isEmpty()
 	
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		firstNode = null;
+		lastNode = null;
 	}
 }//end of class
