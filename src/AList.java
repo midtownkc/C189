@@ -86,13 +86,29 @@ public class AList<T> implements ListInterface<T> {
 	}
 	
 	public boolean contains(T anEntry) {
-		boolean found = false;
-		for (int index = 0; !found && (index < numberOfEntries); index++) {
-			if (anEntry.equals(list[index]))
-				found = true;
-		}
+		return search(0, numberOfEntries - 1, anEntry);
+	}
+	
+	private boolean search(int first, int last, T desiredItem) {
+		boolean found;
+		if (first > last) 
+			found = false;
+		else if (desiredItem.equals(list[first]))
+			found = true;
+		else 
+			found = search(first + 1, last, desiredItem);
 		return found;
 	}
+	
+	// commented out contains to implement recursive method above using separate Search function.
+//	public boolean contains(T anEntry) {
+//		boolean found = false;
+//		for (int index = 0; !found && (index < numberOfEntries); index++) {
+//			if (anEntry.equals(list[index]))
+//				found = true;
+//		}
+//		return found;
+//	}
 	
 	public int getLength() {
 		return numberOfEntries;

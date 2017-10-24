@@ -100,9 +100,9 @@ public class LinkedDeque<T> implements DequeInterface<T> {
 			return data;
 		}
 		
-		void setData(T newData) {
-			data = newData;
-		}
+//		void setData(T newData) {
+//			data = newData;
+//		}
 		
 		DLNode getNextNode() {
 			return next;
